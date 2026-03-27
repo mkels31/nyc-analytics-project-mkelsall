@@ -89,3 +89,83 @@ sources:
             description: Y coordinate in NY State Plane projection system (NAD 83)
           - name: landmark
             description: Nearby landmark or point of interest
+  - name: raw
+    description: Raw data loaded from NYC Open Data
+    database: cis-9440-485822
+    schema: nyc_311_raw_data 
+    tables:
+      - name: source_nyc_open_restaurant_apps
+        description: |
+          NYC 311 restaurant applications for dining.
+          One row per restaurant application.
+        columns:
+          - name: approved_for_roadway_seating
+            description: 
+          - name: approved_for_sidewalk_seating
+            description: 
+          - name: bbl
+            description: 
+          - name: bin
+            description: 
+          - name: borough
+            description: 
+          - name: bulding_number
+            description: 
+          - name: business_address
+            description: 
+          - name: census_tract
+            description: 
+          - name: community_board
+            description: 
+          - name: council_district
+            description: 
+          - name: doing_business_as_dba
+            description: 
+          - name: food_service_establishment
+            description: 
+          - name: globalid
+            description: 
+          - name: healthcompliance_terms
+            description: 
+          - name: landmark_district_or_building
+            description: 
+          - name: landmarkdistrict_terms
+            description: 
+          - name: latitude
+            description: 
+          - name: legal_business_name
+            description: 
+          - name: longitude
+            description: 
+          - name: nta
+            description: 
+          - name: objectid
+            description: 
+          - name: qualify_alcohol
+            description: 
+          - name: restaurant_name
+            description: 
+          - name: roadway_dimensions_area
+            description: 
+          - name: roadway_dimensions_length
+            description: 
+          - name: roadway_dimensions_width
+            description: 
+          - name: seating_interest_sidewalk
+            description: 
+          - name: sidewalk_dimensions_area
+            description: 
+          - name: sidewalk_dimensions_length
+            description: 
+          - name: sidewalk_dimensions_width
+            description: 
+          - name: sla_license_type
+            description:
+          - name: sla_serial_number
+            description:
+          - name: street
+            description:
+          - name: time_of_submission
+            description:
+          - name: zip
+            description:

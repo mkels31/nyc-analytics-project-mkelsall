@@ -1,0 +1,117 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Raw data loaded from NYC Open Data
+    database: cis-9440-485822 
+    schema: final_project_data
+
+    tables:
+      - name: rodent_complaints
+        description: |
+          NYC 311 rodent-related complaints.
+          One row per complaint event.
+        columns:
+          - name: unique_key
+            description: Unique complaint ID
+            tests:
+              - unique
+              - not_null
+
+          - name: created_date
+            description: Date and time complaint was created
+
+          - name: closed_date
+            description: Date and time complaint was closed
+
+          - name: complaint_type
+            description: Complaint category
+
+          - name: descriptor
+            description: Complaint detail such as rats or mice
+
+          - name: incident_zip
+            description: ZIP code of complaint location
+
+          - name: borough
+            description: NYC borough of complaint
+
+          - name: city
+            description: City name
+
+          - name: latitude
+            description: Latitude coordinate
+
+          - name: longitude
+            description: Longitude coordinate
+
+          - name: status
+            description: Complaint status
+
+          - name: agency
+            description: Responsible agency code
+
+          - name: agency_name
+            description: Responsible agency name
+
+      - name: restaurant_inspection_results
+        description: |
+          NYC DOHMH restaurant inspection results.
+          One row per inspection event.
+        columns:
+          - name: camis
+            description: Restaurant identifier
+
+          - name: dba
+            description: Restaurant name
+
+          - name: boro
+            description: Borough
+
+          - name: building
+            description: Building number
+
+          - name: street
+            description: Street name
+
+          - name: zipcode
+            description: ZIP code
+
+          - name: phone
+            description: Restaurant phone number
+
+          - name: cuisine_description
+            description: Cuisine type
+
+          - name: inspection_date
+            description: Date of inspection
+
+          - name: action
+            description: Inspection action taken
+
+          - name: violation_code
+            description: Violation code
+
+          - name: violation_description
+            description: Violation details
+
+          - name: critical_flag
+            description: Indicates critical violation
+
+          - name: score
+            description: Inspection score
+
+          - name: grade
+            description: Inspection grade
+
+          - name: grade_date
+            description: Date grade assigned
+
+          - name: record_date
+            description: Source record update date
+
+          - name: latitude
+            description: Latitude coordinate
+
+          - name: longitude
+            description: Longitude coordinate

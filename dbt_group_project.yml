@@ -12,35 +12,35 @@ macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
 target-path: "target"
-
 clean-targets:
-  - "target"
-  - "dbt_packages"
+ - "target"
+ - "dbt_packages"
+
 
 models:
-  nyc_analytics:
-    +materialized: table
+ nyc_analytics:
+   +materialized: table
 
-    assignment_work:
-      staging:
-        +materialized: view
-        +schema: nyc_rodent_restaurants_staging
+   assignment_work:
+     staging:
+       +materialized: view
+       +schema: nyc_rodent_restaurants_staging
 
-        rodent_311:
-          +materialized: view
+       rodent_311:
+         +materialized: view
 
-        restaurant_inspections:
-          +materialized: view
+       restaurant_inspections:
+         +materialized: view
 
-      marts:
-        +materialized: table
-        +schema: nyc_rodent_restaurants_marts
+     marts:
+       +materialized: table
+       +schema: nyc_rodent_restaurants_marts
 
-        dimensions:
-          +materialized: table
+       dimensions:
+         +materialized: table
 
-        facts:
-          +materialized: table
+       facts:
+         +materialized: table
 
-        analytics:
-          +materialized: table
+       analytics:
+         +materialized: table

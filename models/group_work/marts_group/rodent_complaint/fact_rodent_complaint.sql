@@ -26,6 +26,16 @@ final AS (
         community_board,
         COUNT(*) as complaint_count
     FROM inspections
+
+    GROUP BY full_date,
+             complaint_type,
+             descriptor,
+             agency,
+             borough,
+             zip_code,
+             latitude,
+             longitude,
+             community_board
 )
 
 SELECT *

@@ -63,7 +63,7 @@ CAST(inspection_type AS STRING) AS inspection_type,
 CAST(score AS NUMERIC) AS score,
 CAST(street AS STRING) AS street,
 CAST(violation_code AS STRING) AS violation_code,
-CAST(violation_description AS STRING) AS violation_description
+CAST(violation_description AS STRING) AS violation_description,
 
 
 -- Standardize borough
@@ -74,7 +74,7 @@ WHEN UPPER(TRIM(boro)) IN ('BROOKLYN', 'KINGS COUNTY') THEN 'Brooklyn'
 WHEN UPPER(TRIM(boro)) IN ('QUEENS', 'QUEEN', 'QUEENS COUNTY') THEN 'Queens'
 WHEN UPPER(TRIM(boro)) IN ('STATEN ISLAND', 'RICHMOND COUNTY') THEN 'Staten Island'
 ELSE 'Unknown'
-END AS borough,
+END AS boro,
 
 
 -- Address + coordinates
@@ -89,7 +89,7 @@ FROM source
 -- Filters (clean dataset)
 WHERE inspection_date IS NOT NULL
 AND DATE(SAFE_CAST(inspection_date AS TIMESTAMP)) >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 YEAR)
-AND borough IS NOT NULL
+AND boro IS NOT NULL
 
 
 )

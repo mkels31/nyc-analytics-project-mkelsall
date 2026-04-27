@@ -10,50 +10,35 @@ cleaned AS (
 SELECT
 -- Keep all other columns except ones we are transforming
 * EXCEPT (
-unique_key,
-created_date,
-closed_date,
+address_type,
 agency,
 agency_name,
-complaint_type,
-descriptor,
-status,
-incident_zip,
 borough,
-incident_address,
-street_name,
-cross_street_1,
-cross_street_2,
+city,
+community_board,
+complaint_type,
+created_date,
+descriptor,
 latitude,
+location_type,
 longitude,
-open_data_channel_type
+park_borough
 ),
 
--- Identifiers
-CAST(unique_key AS STRING) AS request_id,
+
 
 -- Date/Time
 CAST(created_date AS TIMESTAMP) AS created_date,
-CAST(closed_date AS TIMESTAMP) AS closed_date,
 
 -- Request details
 CAST(agency AS STRING) AS agency,
 CAST(agency_name AS STRING) AS agency_name,
 CAST(complaint_type AS STRING) AS complaint_type,
 CAST(descriptor AS STRING) AS descriptor,
-UPPER(TRIM(CAST(status AS STRING))) AS status,
-
--- Clean ZIP code
-CASE
-WHEN UPPER(TRIM(CAST(incident_zip AS STRING))) IN ('N/A', 'NA') THEN NULL
-WHEN UPPER(TRIM(CAST(incident_zip AS STRING))) = 'ANONYMOUS' THEN 'Anonymous'
-WHEN LENGTH(CAST(incident_zip AS STRING)) = 5 THEN CAST(incident_zip AS STRING)
-WHEN LENGTH(CAST(incident_zip AS STRING)) = 9 THEN CAST(incident_zip AS STRING)
-WHEN LENGTH(CAST(incident_zip AS STRING)) = 10
-AND REGEXP_CONTAINS(CAST(incident_zip AS STRING), r'^\d{5}-\d{4}')
-THEN CAST(incident_zip AS STRING)
-ELSE NULL
-END AS incident_zip,
+CAST(address_type AS STRING) AS address_type,
+CAST(community_board AS STRING) AS community_board,
+CAST(city AS STRING) AS city,
+CAST(location_type AS STRING) AS location_type,
 
 -- Standardize borough
 CASE
@@ -65,16 +50,19 @@ WHEN UPPER(TRIM(borough)) IN ('STATEN ISLAND', 'RICHMOND COUNTY') THEN 'Staten I
 ELSE 'Unknown'
 END AS borough,
 
+-- Standardize borough
+CASE
+WHEN UPPER(TRIM(park_borough)) IN ('MANHATTAN', 'NEW YORK COUNTY') THEN 'Manhattan'
+WHEN UPPER(TRIM(park_borough)) IN ('BRONX', 'THE BRONX') THEN 'Bronx'
+WHEN UPPER(TRIM(park_borough)) IN ('BROOKLYN', 'KINGS COUNTY') THEN 'Brooklyn'
+WHEN UPPER(TRIM(park_borough)) IN ('QUEENS', 'QUEEN', 'QUEENS COUNTY') THEN 'Queens'
+WHEN UPPER(TRIM(park_borough)) IN ('STATEN ISLAND', 'RICHMOND COUNTY') THEN 'Staten Island'
+ELSE 'Unknown'
+END AS park_borough,
+
 -- Address + coordinates
-CAST(incident_address AS STRING) AS incident_address,
-CAST(street_name AS STRING) AS street_name,
-CAST(cross_street_1 AS STRING) AS cross_street_1,
-CAST(cross_street_2 AS STRING) AS cross_street_2,
 CAST(latitude AS FLOAT64) AS latitude,
 CAST(longitude AS FLOAT64) AS longitude,
-
--- Submission method
-CAST(open_data_channel_type AS STRING) AS method_of_submission,
 
 -- Metadata
 CURRENT_TIMESTAMP() AS _stg_loaded_at
@@ -82,16 +70,11 @@ CURRENT_TIMESTAMP() AS _stg_loaded_at
 FROM source
 
 -- Filters (clean dataset)
-WHERE unique_key IS NOT NULL
-AND created_date IS NOT NULL
-AND CAST(created_date AS DATE) >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 YEAR)
+WHERE created_date IS NOT NULL
+AND DATE(SAFE_CAST(created_date AS TIMESTAMP)) >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 YEAR)
 AND borough IS NOT NULL
 
--- Deduplicate (1 row per complaint)
-QUALIFY ROW_NUMBER() OVER (
-PARTITION BY unique_key
-ORDER BY created_date DESC
-) = 1
+
 )
 
 SELECT *
